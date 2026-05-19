@@ -340,7 +340,7 @@ export default function Survey() {
           required
           value={bothered}
           onChange={(e) => setBothered(e.target.value)}
-          placeholder="A sentence or two is plenty."
+          placeholder="please describe in as much detail."
         />
         <ErrorMsg show={touched && !bothered.trim()}>THIS FIELD IS REQUIRED.</ErrorMsg>
       </Card>
@@ -360,7 +360,7 @@ export default function Survey() {
           required
           value={wishKnew}
           onChange={(e) => setWishKnew(e.target.value)}
-          placeholder="A sentence or two is plenty."
+          placeholder="please describe in as much detail."
         />
         <ErrorMsg show={touched && !wishKnew.trim()}>THIS FIELD IS REQUIRED.</ErrorMsg>
       </Card>

@@ -11,7 +11,7 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "Dentlytics — Operational intelligence for dental practices",
   description:
-    "Dentlytics turns the CCTV system you already own into a live operations dashboard. Waiting times, decon turnaround, reception activity — measured continuously, surfaced cleanly.",
+    "Dentlytics turns the cameras you already own into a live operations dashboard. Waiting times, decon turnaround, reception activity — measured continuously, surfaced cleanly.",
 };
 
 export default function RootLayout({
