@@ -1,9 +1,5 @@
-import Chat from "@/components/chat";
+import DentlyticsLanding from "@/components/dentlytics/landing";
 
 export default function Home() {
-  return (
-    <div className="relative flex h-[calc(100vh_-_theme(spacing.16))] overflow-hidden pb-10 flex-col">
-      <Chat />
-    </div>
-  );
+  return <DentlyticsLanding />;
 }

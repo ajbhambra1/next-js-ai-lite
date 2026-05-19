@@ -52,6 +52,23 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        // Dentlytics palette
+        surface: "#111316",
+        hairline: "#1F2227",
+        ink: "#F5F6F7",
+        mute: "#8B9097",
+        mint: "#00E5A0",
+        warn: "#FF5C5C",
+      },
+      fontFamily: {
+        mono: ["var(--font-jetbrains-mono)", "ui-monospace", "monospace"],
+      },
+      letterSpacing: {
+        tightish: "-0.02em",
+        wider2: "0.08em",
+      },
+      maxWidth: {
+        container: "1200px",
       },
       borderRadius: {
         lg: "var(--radius)",
