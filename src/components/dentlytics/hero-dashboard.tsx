@@ -158,7 +158,7 @@ function MetricLayout({
   headlineMeta: string;
 }) {
   return (
-    <div className="absolute inset-0 p-7 lg:p-9 flex flex-col">
+    <div className="absolute inset-0 p-5 sm:p-7 lg:p-9 flex flex-col">
       <GridBackdrop id={`bg-${headline.replace(/\s+/g, "-").toLowerCase()}`} />
 
       <div className="relative flex items-start justify-between mb-3">
@@ -172,7 +172,7 @@ function MetricLayout({
         </div>
       </div>
 
-      <div className="relative flex-1 grid grid-cols-1 sm:grid-cols-[auto_1px_1fr] items-center gap-6 sm:gap-10">
+      <div className="relative flex-1 grid grid-cols-1 sm:grid-cols-[auto_1px_1fr] items-center gap-4 sm:gap-10">
         <div className="flex items-center justify-center">{gauge}</div>
         <div className="hidden sm:block w-px h-[60%] bg-hairline" />
         <div className="flex flex-col justify-center">{bars}</div>
@@ -181,7 +181,7 @@ function MetricLayout({
   );
 }
 
-function DeconView({ tick }: { tick: number }) {
+function DeconView({ tick, gaugeSize }: { tick: number; gaugeSize: number }) {
   const wobble = Math.sin(tick / 1400) * 0.03;
   const today = 8.9 + wobble;
   const series = [9.4, 9.2, 8.7, 9.1, today];
@@ -189,7 +189,7 @@ function DeconView({ tick }: { tick: number }) {
   const pct = Math.max(0, Math.min(1, 1 - (today - target) / target + 0.5));
   return (
     <MetricLayout
-      gauge={<RadialGauge pct={pct} label="TIME IN DECON" primary={minsToMMSS(today)} sub={`TARGET ${minsToMMSS(target)}`} />}
+      gauge={<RadialGauge size={gaugeSize} pct={pct} label="TIME IN DECON" primary={minsToMMSS(today)} sub={`TARGET ${minsToMMSS(target)}`} />}
       bars={<FiveDayBars values={series} target={target} format={minsToMMSS} />}
       headline="DECON TURNAROUND"
       headlineMeta="ZONE A → ZONE B"
@@ -197,7 +197,7 @@ function DeconView({ tick }: { tick: number }) {
   );
 }
 
-function ReceptionView({ tick }: { tick: number }) {
+function ReceptionView({ tick, gaugeSize }: { tick: number; gaugeSize: number }) {
   const wobble = Math.sin(tick / 1700) * 0.04;
   const today = 12.1 + wobble;
   const series = [14.4, 13.8, 12.6, 13.2, today];
@@ -205,7 +205,7 @@ function ReceptionView({ tick }: { tick: number }) {
   const pct = Math.max(0, Math.min(1, 1 - (today - target) / (target * 0.6)));
   return (
     <MetricLayout
-      gauge={<RadialGauge pct={pct} label="RECEPTION WAIT" primary={minsToMMSS(today)} sub={`TARGET ${minsToMMSS(target)}`} />}
+      gauge={<RadialGauge size={gaugeSize} pct={pct} label="RECEPTION WAIT" primary={minsToMMSS(today)} sub={`TARGET ${minsToMMSS(target)}`} />}
       bars={<FiveDayBars values={series} target={target} format={minsToMMSS} />}
       headline="AVG PATIENT WAIT"
       headlineMeta="ALL CAMERAS · TODAY"
@@ -213,7 +213,7 @@ function ReceptionView({ tick }: { tick: number }) {
   );
 }
 
-function EfficiencyView({ tick }: { tick: number }) {
+function EfficiencyView({ tick, gaugeSize }: { tick: number; gaugeSize: number }) {
   const wobble = Math.sin(tick / 1900) * 0.4;
   const today = 84 + wobble;
   const series = [76, 78, 81, 79, today];
@@ -221,7 +221,7 @@ function EfficiencyView({ tick }: { tick: number }) {
   const pct = today / 100;
   return (
     <MetricLayout
-      gauge={<RadialGauge pct={pct} label="EFFICIENCY SCORE" primary={`${Math.round(today)}%`} sub={`TARGET ${target}%`} />}
+      gauge={<RadialGauge size={gaugeSize} pct={pct} label="EFFICIENCY SCORE" primary={`${Math.round(today)}%`} sub={`TARGET ${target}%`} />}
       bars={<FiveDayBars values={series} target={target} format={(v) => `${Math.round(v)}%`} lowerIsBetter={false} />}
       headline="OVERALL EFFICIENCY"
       headlineMeta="DECON + FLOW + COVERAGE"
@@ -249,6 +249,7 @@ export default function HeroDashboard() {
   const [tick, setTick] = useState(0);
   const [viewIdx, setViewIdx] = useState(0);
   const [scanning, setScanning] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const prefersReduced = useRef(false);
 
   useEffect(() => {
@@ -256,6 +257,14 @@ export default function HeroDashboard() {
       typeof window !== "undefined" &&
       window.matchMedia &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }, []);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 639px)");
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
   }, []);
 
   useEffect(() => {
@@ -273,10 +282,12 @@ export default function HeroDashboard() {
     return () => clearInterval(id);
   }, []);
 
+  const gaugeSize = isMobile ? 160 : 200;
+
   const views = [
-    <EfficiencyView tick={tick} key="e" />,
-    <DeconView tick={tick} key="d" />,
-    <ReceptionView tick={tick} key="r" />,
+    <EfficiencyView tick={tick} gaugeSize={gaugeSize} key="e" />,
+    <DeconView tick={tick} gaugeSize={gaugeSize} key="d" />,
+    <ReceptionView tick={tick} gaugeSize={gaugeSize} key="r" />,
   ];
 
   const pipLabels = ["EFFICIENCY SCORE", "DECON", "RECEPTION"];
@@ -285,7 +296,7 @@ export default function HeroDashboard() {
     <div
       role="img"
       aria-label="Animated preview of Dentlytics dashboard cycling through decon time, reception wait and efficiency score"
-      className="relative w-full aspect-[8/5] rounded-3xl overflow-hidden bg-[#0B0D10] border border-mint/20"
+      className="relative w-full min-h-[520px] sm:min-h-0 sm:aspect-[8/5] rounded-3xl overflow-hidden bg-[#0B0D10] border border-mint/20"
       style={{
         boxShadow:
           "0 0 0 1px rgba(0,229,160,0.08), 0 0 80px -20px rgba(0,229,160,0.15), inset 0 0 60px -20px rgba(0,229,160,0.06)",
