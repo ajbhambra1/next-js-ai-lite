@@ -142,6 +142,8 @@ export default function Survey() {
   const [missing, setMissing] = useState("");
   const [pilot, setPilot] = useState<"yes" | "no" | null>(null);
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [touched, setTouched] = useState(false);
 
   function toggleUseful(opt: string) {
@@ -173,7 +175,7 @@ export default function Survey() {
     return null;
   }
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setTouched(true);
     const firstBad = firstIncompleteId();
@@ -200,8 +202,24 @@ export default function Survey() {
       pilot,
       ts: new Date().toISOString(),
     };
-    console.log("[Dentlytics survey response]", payload);
-    setSubmitted(true);
+
+    setSubmitting(true);
+    setSubmitError(null);
+    try {
+      const res = await fetch("/api/submit-survey", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const result = await res.json().catch(() => ({}));
+      if (!res.ok || !result.ok) {
+        throw new Error(result.error || `HTTP ${res.status}`);
+      }
+      setSubmitted(true);
+    } catch (err) {
+      setSubmitError(err instanceof Error ? err.message : "Submission failed");
+      setSubmitting(false);
+    }
   }
 
   if (submitted) {
@@ -462,11 +480,17 @@ export default function Survey() {
       <div className="pt-2">
         <button
           type="submit"
-          className="cta-mint w-full h-14 bg-mint label-mono text-[13px] flex items-center justify-center gap-3 text-black"
+          disabled={submitting}
+          className="cta-mint w-full h-14 bg-mint label-mono text-[13px] flex items-center justify-center gap-3 text-black disabled:opacity-60 disabled:cursor-not-allowed"
         >
-          <span>SUBMIT RESPONSE</span>
-          <span aria-hidden="true">→</span>
+          <span>{submitting ? "SUBMITTING…" : "SUBMIT RESPONSE"}</span>
+          {!submitting && <span aria-hidden="true">→</span>}
         </button>
+        {submitError && (
+          <p className="label-mono text-[10px] text-warn mt-3 leading-relaxed">
+            SUBMISSION FAILED — {submitError}. PLEASE TRY AGAIN OR EMAIL HELLO@DENTLYTICS.CO.UK
+          </p>
+        )}
         <p className="text-[12px] text-mute mt-4 leading-relaxed">
           Your responses are used only for product research. We don&apos;t share, sell, or add you to any
           marketing list without consent.
