@@ -112,7 +112,7 @@ function Hero({ onCTA }: { onCTA: () => void }) {
               practice activity into live business insights.
             </p>
             <p className="text-[15px] text-mute leading-relaxed mb-10 max-w-[520px]">
-              Dentlytics connects to the CCTV system you already own and converts it into a live operations
+              Dentlytics connects to the cameras you already own and converts them into a live operations
               dashboard. Waiting times, decon turnaround, reception activity — measured continuously,
               surfaced cleanly.
             </p>
@@ -140,7 +140,7 @@ function HowItWorks({ onCTA }: { onCTA: () => void }) {
     {
       num: "01",
       title: "Connect",
-      body: "We integrate via your CCTV provider's API. Setup takes under an hour, remotely.",
+      body: "We integrate via your camera provider's API. Setup takes under an hour, remotely.",
     },
     {
       num: "02",
