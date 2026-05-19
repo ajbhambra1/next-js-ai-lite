@@ -202,9 +202,9 @@ function SurveySection({ surveyRef }: { surveyRef: React.RefObject<HTMLElement> 
     <section
       ref={surveyRef}
       id="survey"
-      className="py-20 md:py-[120px] border-t hairline relative"
+      className="py-20 md:py-[120px] border-t hairline relative bg-[#13171E]"
     >
-      <div className="absolute inset-0 grid-overlay opacity-50 pointer-events-none" aria-hidden="true" />
+      <div className="absolute inset-0 grid-overlay opacity-30 pointer-events-none" aria-hidden="true" />
       <div className="relative max-w-container mx-auto px-6 md:px-8">
         <div className="text-center max-w-[680px] mx-auto mb-14 md:mb-16">
           <Reveal>
