@@ -53,7 +53,7 @@ const config = {
           foreground: "hsl(var(--card-foreground))",
         },
         // Dentlytics palette
-        surface: "#111316",
+        surface: "#1B1F26",
         hairline: "#1F2227",
         ink: "#F5F6F7",
         mute: "#8B9097",
