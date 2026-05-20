@@ -239,7 +239,7 @@ export default function Survey() {
 
   return (
     <form onSubmit={handleSubmit} className="max-w-[640px] mx-auto space-y-6">
-      <Card id="q01" required title="01 · ABOUT YOU">
+      <Card id="q01" required title="01 · CONTACT INFO">
         <div className="space-y-5">
           <div>
             <label htmlFor="f-name" className="label-mono text-[10px] text-mute block mb-1">
@@ -328,7 +328,7 @@ export default function Survey() {
       <Card
         id="q02"
         required
-        title="02 · WHAT'S BOTHERED YOU MOST?"
+        title="02 · WHAT OPERATIONAL PROBLEM HAS BOTHERED YOU MOST?"
         subtitle="What are the operational problems about running your practice that's bothered you most in the last 3 months?"
       >
         <label htmlFor="f-bothered" className="sr-only">
@@ -348,7 +348,7 @@ export default function Survey() {
       <Card
         id="q03"
         required
-        title="03 · WHAT YOU WISH YOU KNEW"
+        title="03 · WHAT YOU WISH YOU COULD SEE ABOUT YOUR PRACTICE?"
         subtitle="Thinking specifically about what happens in your practice's physical spaces — waiting room, reception, decontamination area etc — what's something you wish you could measure in these spaces?"
       >
         <label htmlFor="f-wish-knew" className="sr-only">
@@ -368,7 +368,7 @@ export default function Survey() {
       <Card
         id="q04"
         required
-        title="04 · WHICH OF THESE WOULD BE USEFUL TO MEASURE IN YOUR PRACTICE?"
+        title="04 · WHICH OF THESE OPTIONS WOULD BE USEFUL TO MEASURE IN YOUR PRACTICE?"
         subtitle="Select any that apply."
       >
         <div className="divide-y divide-[#1F2227]">
@@ -385,7 +385,7 @@ export default function Survey() {
       <Card
         id="q05"
         required
-        title="05 · WHICH ONE MATTERS MOST?"
+        title="05 · WHICH ONE OF THE OPTIONS MATTERS MOST TO YOU?"
         subtitle="Of everything above, pick the single metric that would change how you run your practice tomorrow."
       >
         <div className="space-y-2">
@@ -408,7 +408,7 @@ export default function Survey() {
 
       <Card
         id="q06"
-        title="06 · WHAT'S MISSING?"
+        title="06 · IF YOUR ANSWER IS NOT STATED ABOVE, LET US KNOW WHAT YOU WOULD LIKE TO MEASURE."
         subtitle="Is there anything else you'd want measured that we haven't listed? (Optional)"
       >
         <label htmlFor="f-missing" className="sr-only">
