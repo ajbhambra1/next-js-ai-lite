@@ -88,50 +88,6 @@ function RadialGauge({
   );
 }
 
-function MiniLineChart({
-  values,
-  color = "#00E5A0",
-}: {
-  values: number[];
-  color?: string;
-}) {
-  const w = 100;
-  const h = 32;
-  const min = Math.min(...values);
-  const max = Math.max(...values);
-  const range = max - min || 1;
-  const points = values.map(
-    (v, i) =>
-      [
-        (i / (values.length - 1)) * w,
-        h - ((v - min) / range) * (h - 4) - 2,
-      ] as const
-  );
-  const pathD = "M " + points.map((p) => `${p[0]},${p[1]}`).join(" L ");
-  return (
-    <svg
-      width="100%"
-      height="100%"
-      viewBox={`0 0 ${w} ${h}`}
-      preserveAspectRatio="none"
-      aria-hidden="true"
-    >
-      <path
-        d={pathD}
-        fill="none"
-        stroke={color}
-        strokeWidth="1.4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        vectorEffect="non-scaling-stroke"
-      />
-      {points.map(([x, y], i) => (
-        <circle key={i} cx={x} cy={y} r="1.6" fill="#13171E" stroke={color} strokeWidth="1" />
-      ))}
-    </svg>
-  );
-}
-
 function MiniBarChart({
   values,
   color = "#00E5A0",
@@ -255,7 +211,6 @@ export default function HeroDashboard() {
   const pct = efficiency / 100;
   const gaugeSize = isMobile ? 150 : 175;
 
-  const profitSeries = [22, 24, 23, 27, 29, 33, 37, 42];
   const efficiencySeries = [76, 78, 81, 80, 79, 82, 83, efficiencyRounded];
 
   return (
@@ -307,13 +262,10 @@ export default function HeroDashboard() {
           </div>
 
           <div className="flex flex-col gap-3 w-full">
-            <MetricCard
-              label="Profit Increased"
-              value="+£8,420"
-              chart={<MiniLineChart values={profitSeries} />}
-              trend="Trending up by 12% this month"
-              period="Showing total income for the last 8 months"
-            />
+            <div className="grid grid-cols-2 gap-2 sm:gap-3">
+              <MiniMetric label="Waiting room turnover" value="6m 14s" delta="+40%" />
+              <MiniMetric label="Decon" value="4m 20s" delta="+23%" />
+            </div>
             <MetricCard
               label="Efficiency this month"
               value={`${efficiencyRounded}%`}
@@ -322,11 +274,6 @@ export default function HeroDashboard() {
               period="Showing weekly efficiency for the last 8 weeks"
             />
           </div>
-        </div>
-
-        <div className="relative grid grid-cols-2 gap-2 sm:gap-3 mt-4 sm:mt-5">
-          <MiniMetric label="Waiting room turnover" value="6m 14s" delta="+40%" />
-          <MiniMetric label="Decon" value="4m 20s" delta="+23%" />
         </div>
       </div>
     </div>
