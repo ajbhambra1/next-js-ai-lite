@@ -203,6 +203,34 @@ function MetricCard({
   );
 }
 
+function MiniMetric({
+  label,
+  value,
+  delta,
+}: {
+  label: string;
+  value: string;
+  delta: string;
+}) {
+  return (
+    <div className="bg-[#13171E] border border-hairline rounded-xl p-3 sm:p-4">
+      <div className="text-[11px] text-mute mb-2 leading-tight">{label}</div>
+      <div className="flex items-end justify-between gap-2">
+        <div>
+          <div className="label-mono text-[9px] text-mute mb-0.5">AVG</div>
+          <div className="font-mono text-[17px] sm:text-[19px] font-semibold text-ink h-tight leading-none">
+            {value}
+          </div>
+        </div>
+        <div className="flex items-center gap-1 text-[12px] sm:text-[13px] text-mint font-semibold">
+          <span>{delta}</span>
+          <ArrowUp />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function HeroDashboard() {
   const [tick, setTick] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
@@ -294,6 +322,11 @@ export default function HeroDashboard() {
               period="Showing weekly efficiency for the last 8 weeks"
             />
           </div>
+        </div>
+
+        <div className="relative grid grid-cols-2 gap-2 sm:gap-3 mt-4 sm:mt-5">
+          <MiniMetric label="Waiting room turnover" value="6m 14s" delta="+40%" />
+          <MiniMetric label="Decon" value="4m 20s" delta="+23%" />
         </div>
       </div>
     </div>
